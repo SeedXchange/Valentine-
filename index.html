@@ -3,82 +3,137 @@
 <head>
 <meta charset="UTF-8">
 <title>Be My Valentine</title>
+
 <style>
-    body {
-        margin: 0;
-        height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: linear-gradient(135deg, pink, red);
-        font-family: Arial, sans-serif;
-        overflow: hidden;
-    }
+body {
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(135deg, pink, red);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+}
 
-    .card {
-        background: white;
-        padding: 30px;
-        border-radius: 20px;
-        text-align: center;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    }
+.card {
+    background: white;
+    padding: 35px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    z-index: 10;
+}
 
-    h1 {
-        color: red;
-        margin-bottom: 20px;
-    }
+h1 {
+    color: red;
+}
 
-    button {
-        font-size: 18px;
-        padding: 12px 25px;
-        border: none;
-        border-radius: 25px;
-        cursor: pointer;
-        position: relative;
-    }
+p {
+    font-size: 18px;
+}
 
-    #yes {
-        background: red;
-        color: white;
-        margin-right: 20px;
-    }
+button {
+    font-size: 18px;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+}
 
-    #no {
-        background: gray;
-        color: white;
-        position: absolute;
-    }
+#yes {
+    background: red;
+    color: white;
+    margin-right: 15px;
+}
 
-    .result {
-        font-size: 32px;
-        color: red;
-        font-weight: bold;
-    }
+#no {
+    background: gray;
+    color: white;
+    position: absolute;
+}
+
+.result {
+    font-size: 34px;
+    color: red;
+    font-weight: bold;
+}
+
+/* Floating hearts */
+.heart {
+    position: absolute;
+    color: pink;
+    font-size: 20px;
+    animation: float 6s linear infinite;
+}
+
+@keyframes float {
+    0% { transform: translateY(100vh); opacity: 1; }
+    100% { transform: translateY(-10vh); opacity: 0; }
+}
 </style>
 </head>
+
 <body>
 
 <div class="card" id="card">
-    <h1>Will you be my Valentine</h1>
+    <h1 id="text"></h1>
+    <p>Will you be my Valentine ❤️</p>
     <button id="yes">YES</button>
     <button id="no">NO</button>
 </div>
 
+<audio id="loveSound">
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+</audio>
+
 <script>
-    const noBtn = document.getElementById("no");
-    const yesBtn = document.getElementById("yes");
-    const card = document.getElementById("card");
+/* Typing effect */
+const message = "Hey Lastbaby 😍";
+let i = 0;
+const text = document.getElementById("text");
 
-    noBtn.addEventListener("mouseover", () => {
-        const x = Math.random() * (window.innerWidth - 100);
-        const y = Math.random() * (window.innerHeight - 50);
-        noBtn.style.left = x + "px";
-        noBtn.style.top = y + "px";
-    });
+function typeText() {
+    if (i < message.length) {
+        text.innerHTML += message.charAt(i);
+        i++;
+        setTimeout(typeText, 100);
+    }
+}
+typeText();
 
-    yesBtn.addEventListener("click", () => {
-        card.innerHTML = "<div class='result'>Seed’s babyyyyyy ❤️</div>";
-    });
+/* NO button runs */
+const noBtn = document.getElementById("no");
+noBtn.addEventListener("mouseover", () => {
+    const x = Math.random() * (window.innerWidth - 100);
+    const y = Math.random() * (window.innerHeight - 50);
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+});
+
+/* YES button */
+const yesBtn = document.getElementById("yes");
+const card = document.getElementById("card");
+const sound = document.getElementById("loveSound");
+
+yesBtn.addEventListener("click", () => {
+    sound.play();
+    card.innerHTML = "<div class='result'>Seed’s babyyyyyy ❤️</div>";
+});
+
+/* Floating hearts generator */
+setInterval(() => {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerHTML = "❤️";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.fontSize = Math.random() * 20 + 15 + "px";
+    document.body.appendChild(heart);
+
+    setTimeout(() => {
+        heart.remove();
+    }, 6000);
+}, 300);
 </script>
 
 </body>
